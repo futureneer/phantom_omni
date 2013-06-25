@@ -211,12 +211,24 @@ class PhantomROS {
         //br.sendTransform(tf::StampedTransform(link, ros::Time::now(), link_names[5].c_str(), link_names[6].c_str()));
         
         //Sample 'end effector' pose
-        geometry_msgs::PoseStamped pose_stamped;
-        pose_stamped.header.frame_id = link_names[6].c_str();
-        pose_stamped.header.stamp = ros::Time::now();
-        pose_stamped.pose.position.x = 0.0;   //was 0.03 to end of phantom
-        pose_stamped.pose.orientation.w = 1.;
-        pose_publisher.publish(pose_stamped);
+        // geometry_msgs::PoseStamped pose_stamped;
+        // pose_stamped.header.frame_id = link_names[6].c_str();
+        // pose_stamped.header.stamp = ros::Time::now();
+        // pose_stamped.pose.position.x = 0.0;   //was 0.03 to end of phantom
+        // pose_stamped.pose.orientation.w = 1.;
+        // pose_publisher.publish(pose_stamped);
+
+        geometry_msgs::PoseStamped omni_pose;
+        omni_pose.header.frame_id = link_names[6].c_str();
+        omni_pose.header.stamp = ros::Time::now();
+        omni_pose.pose.position.x = this->omni_pose.pose.position.x;
+        omni_pose.pose.position.y = this->omni_pose.pose.position.y;
+        omni_pose.pose.position.z = this->omni_pose.pose.position.z;
+        omni_pose.pose.orientation.x = this->omni_pose.pose.orientation.x;
+        omni_pose.pose.orientation.y = this->omni_pose.pose.orientation.y;
+        omni_pose.pose.orientation.z = this->omni_pose.pose.orientation.z;
+        omni_pose.pose.orientation.w = this->omni_pose.pose.orientation.w;
+        pose_publisher.publish(omni_pose);
 
         geometry_msgs::PoseStamped omni_internal_pose;
         omni_internal_pose.header.frame_id = "sensable";
@@ -224,11 +236,16 @@ class PhantomROS {
         omni_internal_pose.pose.position.x = state->position[0]/1000.0;
         omni_internal_pose.pose.position.y = state->position[1]/1000.0;
         omni_internal_pose.pose.position.z = state->position[2]/1000.0;
+        
+        omni_internal_pose.pose.orientation.x = this->omni_pose.pose.orientation.x;
+        omni_internal_pose.pose.orientation.y = this->omni_pose.pose.orientation.y;
+        omni_internal_pose.pose.orientation.z = this->omni_pose.pose.orientation.z;
+        omni_internal_pose.pose.orientation.w = this->omni_pose.pose.orientation.w;
 
-        omni_internal_pose.pose.orientation.x = state->rot[0]+M_PI;
-        omni_internal_pose.pose.orientation.y = state->rot[1]+M_PI-.53;
-        omni_internal_pose.pose.orientation.z = state->rot[2]+M_PI;
-        omni_internal_pose.pose.orientation.w = 1;
+        // omni_internal_pose.pose.orientation.x = state->rot[0]+M_PI;
+        // omni_internal_pose.pose.orientation.y = state->rot[1]+M_PI-.53;
+        // omni_internal_pose.pose.orientation.z = state->rot[2]+M_PI;
+        // omni_internal_pose.pose.orientation.w = 1;
 
         // ROS_INFO_STREAM(state->position[0]/1000.0);
 
